@@ -42,7 +42,7 @@ function formValidate ( theForm ) {
 			  }
 		  }
 		}
-		if ( Object.getOwnPropertyNames(this.errorMessages).length > 0 ) {
+		if ( !isObjEmpty(this.errorMessages) ) {
 			for ( var k in this.errorMessages ) {
 		  		if (this.errorMessages.hasOwnProperty(k)) {
 					for (index = 0; index < this.errorMessages[k].length; index++) {
@@ -52,4 +52,11 @@ function formValidate ( theForm ) {
 			}
 		}
 	}
+}
+
+function isObjEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop)) return false;
+    }
+    return true;
 }
