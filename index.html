@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>JAVASCRIPT TEST</title>
+		<script src="validate.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			var formRules = { 
+				'name' : 
+					{ 
+					'isAlpha' : '', 
+					'needed' : true
+					}, 
+				'password' : 
+					{ 
+					'isAlphaNumeric' : '', 
+					'needed' : true
+					}
+			};
+			var formMessage = {
+					'name' : 'The name', 
+					'password' : 'The password'
+			};
+		</script>
+	</head>
+	<body>
+		<form action="index.html#1" method="post" onsubmit="var test = new formValidate(this); test.validate(formRules, formMessage);">
+			NAME : <input type="text" name="name" /><br>
+			PASSWORD : <input type="password" name="password" /><br>
+			<input type="submit" value="OK" />
+		</form>
+	</body>
+</html>
