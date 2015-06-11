@@ -1,23 +1,33 @@
+//CONSTRUCTOR NEED THE FORM TO VALIDATE
+//VALIDATE METHOD NEED RULES AND MESSAGES 
 function formValidate ( theForm ) {
 
+	//FORM TO CHECK
 	this.form = theForm;
+	//FILLED WITH ERROR MESSAGE ON ERROR
 	this.errorMessages = {};
+	//DEFAULT ERROR MESSAGE
 	this.defaultMessages = {
 			'needed' : ' is not optional', 
 			'isAlpha' : ' should contain only alphabet characters', 
 			'isAlphaNumeric' : ' should contain only alphabet or numeric characters'
 	}
 
+	//VALIDATION METHOD
+	//NEEDED : REQUIRED, NEED INPUT (NO PARAM)
 	this.needed = function ( el, param ) {
 		return this.form.elements.namedItem(el).value != '' ? true : this.defaultMessages['needed'];
 	}
+	//ISALPHA : A-Za-z CHARACTER ONLY (NO PARAM)
 	this.isAlpha = function ( el, param ) {
-		return /^[A-Za-z]+$/.test(this.form.elements.namedItem(el).value) === true ? true : this.defaultMessages['isAlpha'];
+		return /^[A-Za-z]+$/.test(this.form.elements.namedItem(el).value) ? true : this.defaultMessages['isAlpha'];
 	}
+	//ISALPHANUMERIC : A-Za-z0-9 CHARACTER ONLY (NO PARAM)
 	this.isAlphaNumeric = function ( el, param ) {
-		return /^[A-Za-z0-9]+$/.test(this.form.elements.namedItem(el).value) === true ? true : this.defaultMessages['isAlphaNumeric'];
+		return /^[A-Za-z0-9]+$/.test(this.form.elements.namedItem(el).value) ? true : this.defaultMessages['isAlphaNumeric'];
 	}
 
+	//DISPLAY ERRROR MESSAGE ( ALERT )
 	this.displayErrors = function () {
 		if ( !isObjEmpty(this.errorMessages) ) {
 			for ( var k in this.errorMessages ) {
@@ -30,6 +40,8 @@ function formValidate ( theForm ) {
 		}
 	}
 
+	//VALIDATE THE FORM
+	//LOOP TROUGHT THE RULES, AND VALIDATE EACH ONE, THEN RETURN ERROR MESSAGE IF FALSE
 	this.validate = function ( rules, messages ) {
 		for (var key in rules) {
 			if (rules.hasOwnProperty(key)) {
@@ -46,6 +58,7 @@ function formValidate ( theForm ) {
 			        }
 			}
 		}
+		//DISPLAY
 		this.displayErrors();
 	}
 }
