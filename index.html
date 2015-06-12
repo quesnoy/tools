@@ -25,7 +25,7 @@
 		</script>
 	</head>
 	<body>
-		<form action="index.html#1" method="post" onsubmit="var test = new formValidate(this); test.validate(formRules, formMessage);">
+	<form action="" method="post" onsubmit="var test = new formValidate(this); test.setTag('<br><b style=&quot;color:orange;&quot;>ERROR_MESSAGE</b>'); return test.validate(formRules, formMessage);">
 			NAME : <input type="text" name="name" /><br>
 			PASSWORD : <input type="password" name="password" /><br>
 			<input type="submit" value="OK" />

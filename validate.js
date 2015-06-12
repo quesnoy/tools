@@ -12,6 +12,8 @@ function formValidate ( theForm ) {
 			'isAlpha' : ' should contain only alphabet characters', 
 			'isAlphaNumeric' : ' should contain only alphabet or numeric characters'
 	}
+	//DEFAULT ERROR TAG
+	this.defaultTag = '<br><span style="color:red;">ERROR_MESSAGE</span>';
 
 	//VALIDATION METHOD
 	//NEEDED : REQUIRED, NEED INPUT (NO PARAM)
@@ -36,13 +38,18 @@ function formValidate ( theForm ) {
 		}
 	}
 
-	//DISPLAY ERRROR MESSAGE ( ALERT )
+	//REPLACE DEFAULT ERROR TAG FOR DISPLAY => '<tag>ERROR_MESSAGE</tag>' FORMAT  
+	this.setTag = function ( tag ) {
+		this.defaultTag = tag;
+	}
+
+	//DISPLAY ERRROR MESSAGE 
 	this.displayErrors = function () {
 		if ( !isObjEmpty(this.errorMessages) ) {
 			for ( var k in this.errorMessages ) {
 		  		if (this.errorMessages.hasOwnProperty(k)) {
 					for (index = 0; index < this.errorMessages[k].length; index++) {
-						alert(this.errorMessages[k][index]);
+						this.form.elements.namedItem(k).outerHTML += this.defaultTag.replace('ERROR_MESSAGE', this.errorMessages[k][index]);
 					}
 				}
 			}
@@ -73,6 +80,7 @@ function formValidate ( theForm ) {
 		}
 		//DISPLAY
 		this.displayErrors();
+		return false;
 	}
 }
 
