@@ -7,29 +7,39 @@ function formValidate ( theForm ) {
 	//FILLED WITH ERROR MESSAGE ON ERROR
 	this.errorMessages = {};
 	//DEFAULT ERROR MESSAGE
-	this.defaultMessages = {
-			'needed' : ' is not optional', 
-			'isAlpha' : ' should contain only alphabet characters', 
-			'isAlphaNumeric' : ' should contain only alphabet or numeric characters'
+	this.defaultMessages = {};
+	this.setDefaultMessage = function () {
+		this.defaultMessages = {
+				'needed' : ' is not optional', 
+				'isAlpha' : ' should contain only alphabet characters', 
+				'isAlphaNumeric' : ' should contain only alphabet or numeric characters'
+		}		
 	}
 	//DEFAULT ERROR TAG
 	this.defaultTag = '<br><span style="color:red;">ERROR_MESSAGE</span>';
 
 	//VALIDATION METHOD
 	//NEEDED : REQUIRED, NEED INPUT (NO PARAM)
+	//EL : ELEMENT NAME
+	//PARAM : PARAM
 	this.needed = function ( el, param ) {
 		return this.form.elements.namedItem(el).value != '' ? true : this.defaultMessages['needed'];
 	}
 	//ISALPHA : A-Za-z CHARACTER ONLY (NO PARAM)
+	//EL : ELEMENT NAME
+	//PARAM : PARAM
 	this.isAlpha = function ( el, param ) {
 		return /^[A-Za-z]+$/.test(this.form.elements.namedItem(el).value) ? true : this.defaultMessages['isAlpha'];
 	}
 	//ISALPHANUMERIC : A-Za-z0-9 CHARACTER ONLY (NO PARAM)
+	//EL : ELEMENT NAME
+	//PARAM : PARAM
 	this.isAlphaNumeric = function ( el, param ) {
 		return /^[A-Za-z0-9]+$/.test(this.form.elements.namedItem(el).value) ? true : this.defaultMessages['isAlphaNumeric'];
 	}
 	
 	//REPLACE DEFAULT MESSAGE IF PRESENT
+	//MESSAGES : MESSAGES TO SET
 	this.setMessages = function ( messages ) {
 		for ( var key in messages ) {
 			if ( messages.hasOwnProperty(key) && this.defaultMessages.hasOwnProperty(key) ) {
@@ -39,6 +49,7 @@ function formValidate ( theForm ) {
 	}
 
 	//REPLACE DEFAULT ERROR TAG FOR DISPLAY => '<tag>ERROR_MESSAGE</tag>' FORMAT  
+	//TAG : TAG TO SET
 	this.setTag = function ( tag ) {
 		this.defaultTag = tag;
 	}
@@ -56,26 +67,42 @@ function formValidate ( theForm ) {
 		}
 	}
 
+	//CHECK ONE RULE AND SET ERROR MESSAGE ON ERROR
+	// RULE : VALIDATION METHOD NAME
+	//ELEMENT : ELEMENT NAME
+	//PARAM : VALIDATION METHOD PARAM
+	//NAMING : NAME FOR THE ELEMENT
+	this.checkRule = function (rule, element, param, naming) {
+		var check = this[rule](element, param);
+		if (  check !== true ) {
+			if ( typeof this.errorMessages[element] === 'undefined' ) {
+				this.errorMessages[element] = [];
+			}
+			this.errorMessages[element].push(naming + ' ' + check);
+		}		
+	}
+	
+	//LOOP TROUGH EACH RULE AND SET ERROR MESSAGE ON ERROR
+	//ELEMENT : ELEMENT NAME
+	//RULES : ARRAY OF VALIDATION NAME
+	//NAMING : NAME FOR THE ELEMENT
+	this.loopTroughRules = function (element, rules, naming) {
+		for (var rule in rules) {
+			if (rules.hasOwnProperty(rule)) {
+				this.checkRule(rule, element, rules[rule], naming);
+			}
+		}		
+	}
+	
 	//VALIDATE THE FORM
 	//LOOP TROUGHT THE RULES, AND VALIDATE EACH ONE, THEN RETURN ERROR MESSAGE IF FALSE
-	this.validate = function ( rules, messages ) {
-	
-		//SET MESSAGES
-		this.setMessages(messages);
-	
-		for (var key in rules) {
-			if (rules.hasOwnProperty(key)) {
-			        for ( var rule in rules[key] ) {
-					if (rules[key].hasOwnProperty(rule)) {
-			      			var check = this[rule](key, rules[key][rule]);
-			      			if (  check !== true ) {
-			      				if ( typeof this.errorMessages[key] === 'undefined' ) {
-			      					this.errorMessages[key] = [];
-			      				}
-			      				this.errorMessages[key].push(messages[key] + check);
-			      			}	
-			      		}
-			        }
+	//ELEMENTS : ELEMENTS RULES
+	this.validate = function ( elements ) {
+		for (var element in elements) {
+			if (elements.hasOwnProperty(element)) {
+				this.setDefaultMessage();
+				this.setMessages(elements[element].messages);
+				this.loopTroughRules(element, elements[element].rules, elements[element].naming);
 			}
 		}
 		//DISPLAY
@@ -90,3 +117,4 @@ function isObjEmpty(obj) {
     }
     return true;
 }
+
