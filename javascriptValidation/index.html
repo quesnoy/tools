@@ -8,24 +8,33 @@
 			var formRules = { 
 				'name' : 
 					{ 
-					'isAlpha' : '', 
-					'needed' : true
+						'naming' : 'the name',
+						'rules' : {
+							'isAlpha' : '', 
+							'needed' : true
+						},
+						'messages' : {
+							'needed' : 'is very important'
+						}
 					}, 
 				'password' : 
 					{ 
-					'isAlphaNumeric' : '', 
-					'needed' : true
+						'naming' : 'the password',
+						'rules' : {
+							'isAlphaNumeric' : '', 
+							'needed' : true
+						}
 					}
 			};
-			var formMessage = {
-					'name' : 'The name', 
-					'password' : 'The password', 
-					'needed' : ' is very important' 
-			};
+			function doValidation(theForm) {
+				var test = new formValidate(theForm); 
+				test.setTag('<br><b style=&quot;color:orange;&quot;>ERROR_MESSAGE</b>'); 
+				return test.validate(formRules);
+			}
 		</script>
 	</head>
 	<body>
-	<form action="" method="post" onsubmit="var test = new formValidate(this); test.setTag('<br><b style=&quot;color:orange;&quot;>ERROR_MESSAGE</b>'); return test.validate(formRules, formMessage);">
+	<form action="" method="post" onsubmit="return doValidation(this);">
 			NAME : <input type="text" name="name" /><br>
 			PASSWORD : <input type="password" name="password" /><br>
 			<input type="submit" value="OK" />
